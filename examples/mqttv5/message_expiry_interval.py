@@ -16,15 +16,15 @@ a_callback = utils.Callbacks()
 b_callback = utils.Callbacks()
 
 # a_client as publisher
-aclientid = utils.random_clientid()
-a_client = mqtt.Client(aclientid.encode("utf-8"), protocol = mqtt.MQTTv5)
+a_clientid = utils.random_clientid()
+a_client = mqtt.Client(a_clientid.encode("utf-8"), protocol = mqtt.MQTTv5)
 a_callback.register(a_client)
 
 # b_client as subsriber
-bclientid = utils.random_clientid()
+b_clientid = utils.random_clientid()
 connect_properties = Properties(PacketTypes.CONNECT)
 connect_properties.SessionExpiryInterval = 300
-b_client = mqtt.Client(bclientid.encode("utf-8"), protocol = mqtt.MQTTv5)
+b_client = mqtt.Client(b_clientid.encode("utf-8"), protocol = mqtt.MQTTv5)
 b_callback.register(b_client)
 
 a_client.connect(host = HOST, port = PORT, clean_start = True)
@@ -35,7 +35,7 @@ b_client.connect(host = HOST, port = PORT, clean_start = True, properties = conn
 b_client.loop_start()
 response = b_callback.wait_connected()
 
-topic = bclientid + "/demo"
+topic = b_clientid + "/demo"
 b_client.subscribe(topic, qos = 2)
 response = b_callback.wait_subscribed()
 b_client.disconnect()
@@ -53,7 +53,7 @@ publish(a_client, topic, "Expiry Interval is 60 seconds", publish_properties)
 
 # The subscriber waits 6 seconds before reconnecting
 time.sleep(6)
-b_client = mqtt.Client(bclientid.encode("utf-8"), protocol = mqtt.MQTTv5)
+b_client = mqtt.Client(b_clientid.encode("utf-8"), protocol = mqtt.MQTTv5)
 b_callback.register(b_client)
 
 connect_properties = Properties(PacketTypes.CONNECT)
