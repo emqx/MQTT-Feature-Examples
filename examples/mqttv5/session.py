@@ -64,7 +64,7 @@ def subscribe(client, callback, topic):
     response = callback.wait_subscribed()
     if response["reasonCodes"][0].getId(response["reasonCodes"][0].getName()) > 2:
         print_fail("Subscribe to %s failed due to %s" %
-                   (highlight(topic), highlight(response["reasonCode"][0])))
+                   (highlight(topic), highlight(response["reasonCodes"][0])))
         exit()
 
     print_success("Subscribed to %s" % highlight(topic))
