@@ -83,6 +83,8 @@ class Callbacks:
         client.on_disconnect = self.on_disconnect
         client.on_connect_fail = self.on_connect_fail
 
+# Depth: Number of messages to wait for
+# Limit: Timeout for waiting
 def waitfor(queue, depth, limit):
     total = 0
     while len(queue) < depth and total < limit:
