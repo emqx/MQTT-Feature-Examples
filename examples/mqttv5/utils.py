@@ -30,7 +30,7 @@ class Callbacks:
     def on_connect_fail(self, client, userdata):
         self.conn_failures.append({"userdata": userdata})
 
-    def wait(self, alist, timeout=2):
+    def wait(self, alist, timeout = 2):
         interval = 0.2
         total = 0
         while len(alist) == 0 and total < timeout:
@@ -48,8 +48,8 @@ class Callbacks:
         self.disconnecteds.append(
             {"reasonCode": reasonCode, "properties": properties})
 
-    def wait_disconnected(self):
-        return self.wait(self.disconnecteds)
+    def wait_disconnected(self, timeout = 2):
+        return self.wait(self.disconnecteds, timeout)
 
     def on_message(self, client, userdata, message):
         self.messages.append({"userdata": userdata, "message": message})
@@ -110,3 +110,28 @@ def clean_retained_message(host, port, topic = "#"):
     client.disconnect()
     client.loop_stop()
     time.sleep(.1)
+
+def in_progress():
+    return "\033[1;34;40m\u2026\033[0m "
+
+def success():
+    return "\033[1;32;40m\u2714\033[0m "
+
+def fail():
+    return "\033[1;31;40m\u2718\033[0m "
+
+def highlight(content):
+    if isinstance(content, str):
+        content1 = content
+    else:
+        content1 = str(content)
+    return "\033[0;33;40m" + content1 + "\033[0m"
+
+def print_in_progress(str):
+    print(in_progress() + str)
+
+def print_success(str):
+    print(success() + str)
+
+def print_fail(str):
+    print(fail() + str)
