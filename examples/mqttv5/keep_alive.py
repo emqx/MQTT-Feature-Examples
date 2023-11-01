@@ -1,4 +1,3 @@
-import time
 import utils
 
 import paho.mqtt.client as mqtt
@@ -31,12 +30,12 @@ def test_keep_alive(host, port, keepalive = 2):
     callback.register(client)
 
     client.connect(host = host, port = port, clean_start = True, keepalive = keepalive)
-    print_in_progress("Connecting to %s with Keep Alive = %s." % (highlight(HOST), highlight(keepalive)))
+    print_in_progress("Connecting to %s with Keep Alive = %s." % (highlight(host), highlight(keepalive)))
     client.loop_start()
     response = callback.wait_connected()
     if response["reasonCode"] != 0:
         print_fail("Connect to %s failed due to %s." %
-                   (highlight(HOST), highlight(response["reasonCode"])))
+                   (highlight(host), highlight(response["reasonCode"])))
         exit()
     print_success("Connected.")
 
@@ -60,12 +59,12 @@ def test_server_keep_alive(host, port):
     # 2 Hours
     keepalive = 2 * 60 * 60
     client.connect(host = host, port = port, clean_start = True, keepalive = keepalive)
-    print_in_progress("Connecting to %s with Keep Alive = %s" % (highlight(HOST), highlight(keepalive)))
+    print_in_progress("Connecting to %s with Keep Alive = %s" % (highlight(host), highlight(keepalive)))
     client.loop_start()
     response = callback.wait_connected()
     if response["reasonCode"] != 0:
         print_fail("Connect to %s failed due to %s" %
-                   (highlight(HOST), highlight(response["reasonCode"])))
+                   (highlight(host), highlight(response["reasonCode"])))
         exit()
 
     if not hasattr(response["properties"], 'ServerKeepAlive'):

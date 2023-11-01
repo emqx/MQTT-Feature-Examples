@@ -1,6 +1,6 @@
 import json
-import utils
 import time
+import utils
 
 from urllib import parse as urlparse
 import paho.mqtt.client as mqtt
@@ -60,10 +60,10 @@ publish_properties.PayloadFormatIndicator = 1
 publish(a_client, topic, "msg=hello&ts=" + timestamp(), publish_properties)
 
 # Wait for 2 messages, up to 1 second
-utils.waitfor(b_callback.messages, 2, 1)
+messages = b_callback.wait_messages(2, 1)
 
-if len(b_callback.messages) == 2:
-    for message in b_callback.messages:
+if len(messages) == 2:
+    for message in messages:
         msg = message["message"]
         content = parse(msg)
         print("[Received] Topic: %s, Content Type: %s, Payload Format Indicator: %d, Msg: %s, Timestamp: %s" %

@@ -1,4 +1,3 @@
-import time
 import utils
 
 import paho.mqtt.client as mqtt
@@ -90,8 +89,8 @@ if __name__=="__main__":
 
     publish(client, topic, "Hello World")
 
-    utils.waitfor(callback.messages, 1, 2)
-    msg = callback.messages[0]["message"]
+    messages = callback.wait_messages(1, 2)
+    msg = messages[0]["message"]
     print_success("Received from %s\n\
     Payload = %s" % (highlight(msg.topic), highlight(msg.payload.decode("utf-8"))))
 
