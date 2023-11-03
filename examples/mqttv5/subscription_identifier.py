@@ -50,11 +50,11 @@ client.subscribe(clientid + "/home/PM2_5", qos = 2, properties = sub_properties)
 response = callback.wait_subscribed()
 
 publish(client, clientid + "/home/PM2_5", json.dumps({'pm2.5': 60}))
-utils.waitfor(callback.messages, 2, 2)
+callback.wait_messages(2, 2)
 
 print("\n")
 publish(client, clientid + "/home/temperature", json.dumps({'temperature': 27.3}))
-utils.waitfor(callback.messages, 3, 2)
+callback.wait_messages(1, 2)
 
 client.disconnect()
 callback.wait_disconnected()

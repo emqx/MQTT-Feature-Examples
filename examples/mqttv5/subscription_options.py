@@ -33,8 +33,8 @@ def qos():
     publish(client, TOPIC, "Granted QoS = 1", 1)
     publish(client, TOPIC, "Granted QoS = 2", 2)
 
-    utils.waitfor(callback.messages, 3, 2)
-    for message in callback.messages:
+    messages = callback.wait_messages(3, 2)
+    for message in messages:
         msg = message["message"]
         print("[Received] Topic: %s, Payload: %s, QoS: %d" % (msg.topic, msg.payload.decode("utf-8"), msg.qos))
 
@@ -60,8 +60,8 @@ def no_local():
     callback.wait_subscribed()
     print("[Subscribe] No Local: 0")
     publish(client, TOPIC, "No Local = 0")
-    utils.waitfor(callback.messages, 1, 2)
-    msg = callback.messages[0]["message"]
+    messages = callback.wait_messages(1, 2)
+    msg = messages[0]["message"]
     print("[Received] Topic: %s, Payload: %s" % (msg.topic, msg.payload.decode("utf-8")))
 
     callback.clear()
@@ -71,8 +71,8 @@ def no_local():
     callback.wait_subscribed()
     print("\n[Subscribe] No Local: 1")
     publish(client, TOPIC, "No Local = 1")
-    utils.waitfor(callback.messages, 1, 2)
-    if len(callback.messages) == 0:
+    messages = callback.wait_messages(1, 2)
+    if len(messages) == 0:
         print("[Received] No message")
 
     client.disconnect()
@@ -99,8 +99,8 @@ def retain_as_published():
     callback.wait_subscribed()
     print("[Subscribe] Retain As Published: 0")
     publish(client, TOPIC, "Retain As Published = 0", retain = True)
-    utils.waitfor(callback.messages, 1, 2)
-    msg = callback.messages[0]["message"]
+    messages = callback.wait_messages(1, 2)
+    msg = messages[0]["message"]
     print("[Received] Topic: %s, Payload: %s, Retain: %d" % (msg.topic, msg.payload.decode("utf-8"), msg.retain))
 
     client.unsubscribe(TOPIC)
@@ -114,8 +114,8 @@ def retain_as_published():
     callback.wait_subscribed()
     print("\n[Subscribe] Retain As Published: 1")
     publish(client, TOPIC, "Retain As Published = 1", retain = True)
-    utils.waitfor(callback.messages, 1, 2)
-    msg = callback.messages[0]["message"]
+    messages = callback.wait_messages(1, 2)
+    msg = messages[0]["message"]
     print("[Received] Topic: %s, Payload: %s, Retain: %d" % (msg.topic, msg.payload.decode("utf-8"), msg.retain))
 
     client.disconnect()
@@ -144,8 +144,8 @@ def retain_handling():
     client.subscribe(TOPIC, options = SubscribeOptions(retainHandling = 0))
     callback.wait_subscribed()
     print("\n[Subscribe] Retain Handling: 0")
-    utils.waitfor(callback.messages, 1, 2)
-    msg = callback.messages[0]["message"]
+    messages = callback.wait_messages(1, 2)
+    msg = messages[0]["message"]
     print("[Received] Topic: %s, Payload: %s, Retain: %d" % (msg.topic, msg.payload.decode("utf-8"), msg.retain))
 
     callback.clear()
@@ -153,8 +153,8 @@ def retain_handling():
     client.subscribe(TOPIC, options = SubscribeOptions(retainHandling = 0))
     callback.wait_subscribed()
     print("[Subscribe] Retain Handling: 0")
-    utils.waitfor(callback.messages, 1, 2)
-    msg = callback.messages[0]["message"]
+    messages = callback.wait_messages(1, 2)
+    msg = messages[0]["message"]
     print("[Received] Topic: %s, Payload: %s, Retain: %d" % (msg.topic, msg.payload.decode("utf-8"), msg.retain))
 
     client.unsubscribe(TOPIC)
@@ -165,8 +165,8 @@ def retain_handling():
     client.subscribe(TOPIC, options = SubscribeOptions(retainHandling = 1))
     callback.wait_subscribed()
     print("\n[Subscribe] Retain Handling: 1")
-    utils.waitfor(callback.messages, 1, 2)
-    msg = callback.messages[0]["message"]
+    messages = callback.wait_messages(1, 2)
+    msg = messages[0]["message"]
     print("[Received] Topic: %s, Payload: %s, Retain: %d" % (msg.topic, msg.payload.decode("utf-8"), msg.retain))
 
     callback.clear()
@@ -174,8 +174,8 @@ def retain_handling():
     client.subscribe(TOPIC, options = SubscribeOptions(retainHandling = 1))
     callback.wait_subscribed()
     print("[Subscribe] Retain Handling: 1")
-    utils.waitfor(callback.messages, 1, 2)
-    if len(callback.messages) == 0:
+    messages = callback.wait_messages(1, 2)
+    if len(messages) == 0:
         print("[Received] No message")
 
     client.unsubscribe(TOPIC)
@@ -186,8 +186,8 @@ def retain_handling():
     client.subscribe(TOPIC, options = SubscribeOptions(retainHandling = 2))
     callback.wait_subscribed()
     print("\n[Subscribe] Retain Handling: 2")
-    utils.waitfor(callback.messages, 1, 2)
-    if len(callback.messages) == 0:
+    messages = callback.wait_messages(1, 2)
+    if len(messages) == 0:
         print("[Received] No message")
 
     client.disconnect()

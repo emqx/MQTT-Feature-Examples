@@ -1,5 +1,5 @@
-import utils
 import time
+import utils
 
 import paho.mqtt.client as mqtt
 from paho.mqtt.packettypes import PacketTypes
@@ -62,10 +62,10 @@ b_client.connect(host = HOST, port = PORT, clean_start = False, properties = con
 b_client.loop_start()
 response = b_callback.wait_connected()
 
-utils.waitfor(b_callback.messages, 2, 1)
+messages = b_callback.wait_messages(2, 1)
 
-if len(b_callback.messages) == 1:
-    msg = b_callback.messages[0]["message"]
+if len(messages) == 1:
+    msg = messages[0]["message"]
     print("[Received] Topic: %s, Payload: %s, Remaining expiry interval: %d" %
           (msg.topic, msg.payload.decode("utf-8"), msg.properties.MessageExpiryInterval))
 else:

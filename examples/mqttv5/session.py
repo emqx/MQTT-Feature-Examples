@@ -1,9 +1,10 @@
-import time
 import utils
 
 import paho.mqtt.client as mqtt
 from paho.mqtt.packettypes import PacketTypes
 from paho.mqtt.properties import Properties
+
+from utils import print_in_progress, print_success, print_fail, highlight
 
 HOST = "broker.emqx.io"
 PORT = 1883
@@ -16,22 +17,6 @@ def publish(client, topic, payload):
     print_in_progress("Publishing to %s:\n\
     Payload = %s" % (highlight(topic), highlight(payload)))
     client.publish(topic, payload)
-
-def print_in_progress(str):
-    print(INPROGRESS + str)
-
-def print_success(str):
-    print(SUCCESS + str)
-
-def print_fail(str):
-    print(FAIL + str)
-
-def highlight(content):
-    if isinstance(content, str):
-        content1 = content
-    else:
-        content1 = str(content)
-    return "\033[0;33;40m" + content1 + "\033[0m"
 
 def connect(client, callback, clean_start = True, session_expiry_interval = 0):
     properties = Properties(PacketTypes.CONNECT)
@@ -104,9 +89,9 @@ if __name__=="__main__":
 
     publish(client, topic, "Hello World")
 
-    utils.waitfor(callback.messages, 1, 2)
-    msg = callback.messages[0]["message"]
-    print(SUCCESS + "Received from %s\n\
+    messages = callback.wait_messages(1, 2)
+    msg = messages[0]["message"]
+    print_success("Received from %s\n\
     Payload = %s" % (highlight(msg.topic), highlight(msg.payload.decode("utf-8"))))
 
     # Update session expiry interval when disconnecting
