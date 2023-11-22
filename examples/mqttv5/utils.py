@@ -116,20 +116,20 @@ def clean_retained_message(host, port, topic = "#"):
     time.sleep(.1)
 
 def in_progress():
-    return "\033[1;34;40m\u2026\033[0m "
+    return "\033[1;34m\u2026\033[0m "
 
 def success():
-    return "\033[1;32;40m\u2714\033[0m "
+    return "\033[1;32m\u2714\033[0m "
 
 def fail():
-    return "\033[1;31;40m\u2718\033[0m "
+    return "\033[1;31m\u2718\033[0m "
 
 def highlight(content):
     if isinstance(content, str):
         content1 = content
     else:
         content1 = str(content)
-    return "\033[0;33;40m" + content1 + "\033[0m"
+    return "\033[0;33m" + content1 + "\033[0m"
 
 def print_in_progress(str):
     print(in_progress() + str)
