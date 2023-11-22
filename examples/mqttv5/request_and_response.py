@@ -18,6 +18,9 @@ def test_request_and_response(host, port):
     clients = []
     topics = ["state/light-in-bedroom/power", "command/light-in-bedroom/power", "new/state/light-in-bedroom/power"]
 
+    # Client 0 - command/... -> MQTT Server - command/... -> Client 1
+    # Client 0 <- state/... --- MQTT Server <- state/... --- Client 1
+    # So Client 0 subscribe to state/..., Client 1 subscribe to command/...
     for i in range(2):
         callback = utils.Callbacks()
         clientid = utils.random_clientid()
@@ -68,12 +71,14 @@ def test_request_and_response(host, port):
         clients,
         callbacks,
         request_topic = topics[1],
+        # Use a new Response Topic
         response_topic = topics[2],
         correlation_data = "124",
         payload = "ON"
     )
 
 def request_and_response(clients, callbacks, request_topic, response_topic, correlation_data, payload):
+    # Set Response Topic and Correlation Data
     properties = Properties(PacketTypes.PUBLISH)
     properties.ResponseTopic = response_topic
     properties.CorrelationData = bytes(correlation_data, encoding = "utf-8")
@@ -96,6 +101,7 @@ def request_and_response(clients, callbacks, request_topic, response_topic, corr
     
     messages = callbacks[REQUESTER].wait_messages(count = 1, timeout = 2)
     msg = messages[0]["message"]
+    # Check whether the response contains associated data and is consistent with the request
     if hasattr(msg.properties, 'CorrelationData'):
         if msg.properties.CorrelationData.decode("utf-8") == correlation_data:
             print_success("Client %s received a response from %s: %s, with correct correlation data" % 
